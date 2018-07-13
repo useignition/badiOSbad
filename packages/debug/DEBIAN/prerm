@@ -1,0 +1,33 @@
+#!/bin/sh
+
+printf "\n##########\n# Starting pre removal.";
+printf "\n# Reverting to hosts backup.";
+printf "\n# Unblocking revokes in hosts file.";
+# sed -e ':a' -e 'N' -e '$!ba' -e 's/\n# badiOSbad\n127.0.0.1 ocsp.apple.com\n# We block the Software Update Daemon instead of the URL\n\n//g' > /etc/hosts
+if [ ! -f /etc/hosts.bk ]; then
+    printf "\n# Who's been messing with the hosts file backup?";
+    echo "##" > /etc/hosts
+    echo "# Host Database" >> /etc/hosts
+    echo "#" >> /etc/hosts
+    echo "# localhost is used to configure the loopback interface" >> /etc/hosts
+    echo "# when the system is booting.  Do not change this entry." >> /etc/hosts
+    echo "##" >> /etc/hosts
+    echo "127.0.0.1	localhost" >> /etc/hosts
+    echo "255.255.255.255	broadcasthost" >> /etc/hosts
+    echo "::1             localhost" >> /etc/hosts
+else
+	mv /etc/hosts.bk /etc/hosts;
+fi
+
+printf "\n# Reverting to Software Update Service Daemon backup.";
+mv /System/Library/LaunchDaemons/com.apple.softwareupdateservicesd.plist.bk /System/Library/LaunchDaemons/com.apple.softwareupdateservicesd.plist;
+printf "\n# Reverting to Software Update Service Framework backup.";
+mv /System/Library/PrivateFrameworks/SoftwareUpdateServices.framework/Support/softwareupdateservicesd.bk /System/Library/PrivateFrameworks/SoftwareUpdateServices.framework/Support/softwareupdateservicesd;
+printf "\n# Loading Software Update Service Daemon.";
+launchctl load /System/Library/LaunchDaemons/com.apple.softwareupdateservicesd.plist;
+printf "\n# Installing Feedback Assistant App from backup.";
+mv "/var/mobile/Documents/Feedback Assistant iOS.app.bk" "/Applications/Feedback Assistant iOS.app";
+printf "\n# Running UICache.";
+uicache;
+printf "\n# badiOSbad has been successfully removed! This tweak was brought to you by @useignition the #1 3rd Party AppStore! https://ignition.fun.\n##########\n\n";
+exit 0;

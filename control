@@ -1,0 +1,9 @@
+Package: fun.ignition.badiosbad
+Name: badiOSBad
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: Block iOS System Updates from the core, Castrate installd to allow 7 day certificate signed IPAs to install OTA (only when in jailbroken state), removes the Feedback Assistant App, removes update badge, removes the Software Updates Tab and destroys app revokes!
+Maintainer: Ignition
+Author: Ignition
+Section: Tweaks
+Version: 1.2.5-debug
